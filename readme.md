@@ -1,6 +1,6 @@
 # dropwizard-webjars-bundle
 
-A [Dropwizard](http://dropwizard.codahale.com) bundle that makes it
+A [Dropwizard](http://dropwizard.io) bundle that makes it
 a lot easier to work with [WebJars](http://www.webjars.org).
 
 Regular java code doesn't need to know or care about what version of a
@@ -15,14 +15,11 @@ Just add this maven dependency to get started:
 
 ```xml
 <dependency>
-    <groupId>com.bazaarvoice.dropwizard</groupId>
+    <groupId>com.nefarious.dropwizard</groupId>
     <artifactId>dropwizard-webjars-bundle</artifactId>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
 </dependency>
 ```
-
-- For Dropwizard 0.6.2: use version < 0.2.0
-- For Dropwizard 0.7.0: use version >= 0.2.0
 
 Add the resource to your environment:
 

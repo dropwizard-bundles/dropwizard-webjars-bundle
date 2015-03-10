@@ -1,4 +1,4 @@
-package com.bazaarvoice.dropwizard.webjars;
+package com.nefariouszhen.dropwizard.webjars;
 
 import io.dropwizard.setup.Environment;
 import org.junit.Test;

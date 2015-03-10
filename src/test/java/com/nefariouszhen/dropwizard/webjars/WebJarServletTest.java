@@ -1,4 +1,4 @@
-package com.bazaarvoice.dropwizard.webjars;
+package com.nefariouszhen.dropwizard.webjars;
 
 import com.google.common.base.Throwables;
 import org.eclipse.jetty.http.HttpTester;
@@ -51,7 +51,7 @@ public class WebJarServletTest {
 
     @Test
     public void testNonStandardGroupWebjar() throws Exception {
-        setMavenGroups("org.webjars", "com.bazaarvoice");
+        setMavenGroups("org.webjars", "com.nefariouszhen");
 
         HttpTester.Response response = get("test-webjar/hello.txt");
         assertEquals(200, response.getStatus());

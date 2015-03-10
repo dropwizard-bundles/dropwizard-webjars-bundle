@@ -1,4 +1,4 @@
-package com.bazaarvoice.dropwizard.webjars;
+package com.nefariouszhen.dropwizard.webjars;
 
 import com.google.common.cache.CacheLoader;
 import com.google.common.io.Closer;
