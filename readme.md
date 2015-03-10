@@ -8,6 +8,7 @@ dependency it is using.  It simply imports the class by name and goes on about
 its business.  Why shouldn't your front-end development work the same way?
 This bundle automatically injects version information for you.
 
+[![Build Status](https://travis-ci.org/dropwizard-bundles/dropwizard-webjars-bundle.png)](https://travis-ci.org/dropwizard-bundles/dropwizard-webjars-bundle)
 
 ## Getting Started
 
