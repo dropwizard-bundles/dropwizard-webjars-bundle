@@ -16,7 +16,7 @@ Just add this maven dependency to get started:
 
 ```xml
 <dependency>
-    <groupId>com.nefarious.dropwizard</groupId>
+    <groupId>io.dropwizard-bundles</groupId>
     <artifactId>dropwizard-webjars-bundle</artifactId>
     <version>0.8.0</version>
 </dependency>
