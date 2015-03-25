@@ -1,4 +1,4 @@
-package com.nefariouszhen.dropwizard.webjars;
+package io.dropwizard.bundles.webjars;
 
 import com.google.common.hash.Hashing;
 import com.google.common.net.MediaType;

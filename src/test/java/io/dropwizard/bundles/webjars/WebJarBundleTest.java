@@ -1,4 +1,4 @@
-package com.nefariouszhen.dropwizard.webjars;
+package io.dropwizard.bundles.webjars;
 
 import io.dropwizard.setup.Environment;
 import org.junit.Test;

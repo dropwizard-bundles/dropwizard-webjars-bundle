@@ -1,4 +1,4 @@
-package com.nefariouszhen.dropwizard.webjars;
+package io.dropwizard.bundles.webjars;
 
 import com.google.common.cache.CacheLoader;
 import com.google.common.io.Closer;
