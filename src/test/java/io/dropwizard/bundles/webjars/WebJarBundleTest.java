@@ -1,10 +1,9 @@
 package io.dropwizard.bundles.webjars;
 
 import io.dropwizard.setup.Environment;
+import javax.servlet.ServletRegistration;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-
-import javax.servlet.ServletRegistration;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
@@ -14,16 +13,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class WebJarBundleTest {
-    private final Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
+  private final Environment environment = mock(Environment.class, RETURNS_DEEP_STUBS);
 
-    @Test
-    public void testRegistersAtWebjarsPath() {
-        new WebJarBundle().run(environment);
+  @Test
+  public void testRegistersAtWebjarsPath() {
+    new WebJarBundle().run(environment);
 
-        ServletRegistration.Dynamic dynamic = environment.servlets().addServlet(eq("webjars"), notNull(WebJarServlet.class));
-        ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
-        verify(dynamic).addMapping(pathCaptor.capture());
+    ServletRegistration.Dynamic dynamic = environment.servlets()
+        .addServlet(eq("webjars"), notNull(WebJarServlet.class));
+    ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
+    verify(dynamic).addMapping(pathCaptor.capture());
 
-        assertEquals("/webjars/*", pathCaptor.getValue());
-    }
+    assertEquals("/webjars/*", pathCaptor.getValue());
+  }
 }
