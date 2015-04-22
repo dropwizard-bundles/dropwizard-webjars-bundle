@@ -12,55 +12,55 @@ import java.util.Properties;
 /**
  * Determines the version of the webjar that's in the classpath for a particular library.
  * <p/>
- * The version of a webjar can be determined by looking at the <code>pom.properties</code> file located at
- * {@code META-INF/maven/<group>/<library>/pom.properties}.
+ * The version of a webjar can be determined by looking at the <code>pom.properties</code> file
+ * located at {@code META-INF/maven/<group>/<library>/pom.properties}.
  * <p/>
- * Where {@code <group>} is the name of the maven group the webjar artifact is part of, and {@code <library>} is the
- * name of the library.
+ * Where {@code <group>} is the name of the maven group the webjar artifact is part of, and
+ * {@code <library>} is the name of the library.
  */
 class VersionLoader extends CacheLoader<String, String> {
-    public static final String NOT_FOUND = "VERSION-NOT-FOUND";
+  public static final String NOT_FOUND = "VERSION-NOT-FOUND";
 
-    private final Iterable<String> groups;
+  private final Iterable<String> groups;
 
-    VersionLoader(Iterable<String> groups) {
-        this.groups = groups;
+  VersionLoader(Iterable<String> groups) {
+    this.groups = groups;
+  }
+
+  @Override
+  public String load(String library) throws Exception {
+    for (String group : groups) {
+      String found = tryToLoadFrom("META-INF/maven/%s/%s/pom.properties", group, library);
+      if (found != null) {
+        return found;
+      }
     }
 
-    @Override
-    public String load(String library) throws Exception {
-        for (String group : groups) {
-            String found = tryToLoadFrom("META-INF/maven/%s/%s/pom.properties", group, library);
-            if (found != null) {
-                return found;
-            }
-        }
+    return NOT_FOUND;
+  }
 
-        return NOT_FOUND;
+  private String tryToLoadFrom(String format, String group, String library) {
+    String path = String.format(format, group, library);
+    URL url;
+    try {
+      url = Resources.getResource(path);
+    } catch (IllegalArgumentException e) {
+      return null;
     }
 
-    private String tryToLoadFrom(String format, String group, String library) {
-        String path = String.format(format, group, library);
-        URL url;
-        try {
-            url = Resources.getResource(path);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+    try {
+      Closer closer = Closer.create();
+      InputStream in = closer.register(url.openStream());
+      try {
+        Properties props = new Properties();
+        props.load(in);
 
-        try {
-            Closer closer = Closer.create();
-            InputStream in = closer.register(url.openStream());
-            try {
-                Properties props = new Properties();
-                props.load(in);
-
-                return props.getProperty("version");
-            } finally {
-                closer.close();
-            }
-        } catch (IOException e) {
-            return null;
-        }
+        return props.getProperty("version");
+      } finally {
+        closer.close();
+      }
+    } catch (IOException e) {
+      return null;
     }
+  }
 }
