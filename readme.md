@@ -18,7 +18,7 @@ Just add this maven dependency to get started:
 <dependency>
     <groupId>io.dropwizard-bundles</groupId>
     <artifactId>dropwizard-webjars-bundle</artifactId>
-    <version>0.8.1</version>
+    <version>0.9.2</version>
 </dependency>
 ```
 
