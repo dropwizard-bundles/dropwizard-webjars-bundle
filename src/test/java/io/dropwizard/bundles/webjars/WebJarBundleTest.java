@@ -26,4 +26,17 @@ public class WebJarBundleTest {
 
     assertEquals("/webjars/*", pathCaptor.getValue());
   }
+
+  @Test
+  public void testRegistersAtCustomPath() {
+    String path = "path";
+    new WebJarBundle().withUrlPrefix(path).run(environment);
+
+    ServletRegistration.Dynamic dynamic = environment.servlets()
+        .addServlet(eq("webjars"), notNull(WebJarServlet.class));
+    ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
+    verify(dynamic).addMapping(pathCaptor.capture());
+
+    assertEquals("/" + path + "/*", pathCaptor.getValue());
+  }
 }

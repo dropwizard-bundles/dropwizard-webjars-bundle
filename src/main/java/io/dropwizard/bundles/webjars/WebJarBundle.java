@@ -5,13 +5,13 @@ import com.google.common.collect.Lists;
 import io.dropwizard.Bundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
 import java.util.Collections;
 import java.util.List;
 
 public class WebJarBundle implements Bundle {
   private CacheBuilder cacheBuilder = null;
   private List<String> packages = Lists.newArrayList(WebJarServlet.DEFAULT_MAVEN_GROUPS);
+  private String urlPrefix = WebJarServlet.DEFAULT_URL_PREFIX;
 
   public WebJarBundle() {}
 
@@ -28,15 +28,33 @@ public class WebJarBundle implements Bundle {
     Collections.addAll(packages, additionalPackages);
   }
 
+  public WebJarBundle withUrlPrefix(String prefix) {
+    urlPrefix = prefix;
+    return this;
+  }
+
+  private String normalizedUrlPrefix() {
+    final StringBuilder pathBuilder = new StringBuilder();
+    if (!urlPrefix.startsWith("/")) {
+      pathBuilder.append('/');
+    }
+    pathBuilder.append(urlPrefix);
+    if (!urlPrefix.endsWith("/")) {
+      pathBuilder.append('/');
+    }
+    return pathBuilder.toString();
+  }
+
   @Override
   public void initialize(Bootstrap<?> bootstrap) {
   }
 
   @Override
   public void run(Environment environment) {
-    WebJarServlet servlet = new WebJarServlet(cacheBuilder, packages);
+    String prefix = normalizedUrlPrefix();
+    WebJarServlet servlet = new WebJarServlet(cacheBuilder, packages, prefix);
     environment.servlets()
         .addServlet("webjars", servlet)
-        .addMapping(WebJarServlet.URL_PREFIX + "*");
+        .addMapping(prefix + "*");
   }
 }
