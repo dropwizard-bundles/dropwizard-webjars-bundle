@@ -27,20 +27,23 @@ import org.slf4j.LoggerFactory;
  * without having to update all of the references to the WebJar in your UI code.
  */
 public class WebJarServlet extends HttpServlet {
-  /** The URL prefix that webjars are served out of. */
-  public static final String URL_PREFIX = "/webjars/";
+  /** The default URL prefix that webjars are served out of. */
+  public static final String DEFAULT_URL_PREFIX = "/webjars/";
 
   /** The default maven group(s) that WebJars are searched for in. */
   public static final String[] DEFAULT_MAVEN_GROUPS = {"org.webjars"};
-
-  /** A path parser that can determine the library and library resource a particular path is for. */
-  private static final Pattern PATH_PARSER = Pattern.compile(URL_PREFIX + "([^/]+)/(.+)");
 
   /** An If-None-Match header parser, splits the header into the multiple ETags if present. */
   private static final Splitter IF_NONE_MATCH_SPLITTER =
       Splitter.on(',').omitEmptyStrings().trimResults();
 
   private static final Logger LOG = LoggerFactory.getLogger(WebJarServlet.class);
+
+  /** The URL prefix that webjars are served out of. */
+  private final String urlPrefix;
+
+  /** A path parser that can determine the library and library resource a particular path is for. */
+  private final Pattern pathParser;
 
   private final transient LoadingCache<AssetId, Asset> cache;
 
@@ -51,7 +54,7 @@ public class WebJarServlet extends HttpServlet {
    * @param groups The allowed maven groups of webjars to look for and match against.
    */
   @SuppressWarnings("unchecked")
-  public WebJarServlet(CacheBuilder builder, Iterable<String> groups) {
+  public WebJarServlet(CacheBuilder builder, Iterable<String> groups, String urlPrefix) {
     if (builder == null) {
       builder = CacheBuilder.newBuilder()
           .maximumWeight(5 * 1024 * 1024)
@@ -64,6 +67,8 @@ public class WebJarServlet extends HttpServlet {
 
     AssetLoader loader = new AssetLoader(new VersionLoader(groups));
     cache = builder.weigher(new AssetWeigher()).build(loader);
+    this.urlPrefix = urlPrefix;
+    pathParser = Pattern.compile(urlPrefix + "([^/]+)/(.+)");
   }
 
   @Override
@@ -82,7 +87,7 @@ public class WebJarServlet extends HttpServlet {
 
     // Check to see if this is a valid path that we know how to deal with.
     // If so parse out the library and resource.
-    Matcher match = PATH_PARSER.matcher(path);
+    Matcher match = pathParser.matcher(path);
     if (!match.matches()) {
       resp.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
