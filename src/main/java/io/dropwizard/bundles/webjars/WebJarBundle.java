@@ -9,13 +9,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class WebJarBundle implements Bundle {
-  private CacheBuilder cacheBuilder = null;
+  private CacheBuilder<AssetId, Asset> cacheBuilder = null;
   private List<String> packages = Lists.newArrayList(WebJarServlet.DEFAULT_MAVEN_GROUPS);
   private String urlPrefix = WebJarServlet.DEFAULT_URL_PREFIX;
 
   public WebJarBundle() {}
 
-  public WebJarBundle(CacheBuilder builder) {
+  public WebJarBundle(CacheBuilder<AssetId, Asset> builder) {
     cacheBuilder = builder;
   }
 
@@ -23,7 +23,7 @@ public class WebJarBundle implements Bundle {
     Collections.addAll(packages, additionalPackages);
   }
 
-  public WebJarBundle(CacheBuilder builder, String... additionalPackages) {
+  public WebJarBundle(CacheBuilder<AssetId, Asset> builder, String... additionalPackages) {
     cacheBuilder = builder;
     Collections.addAll(packages, additionalPackages);
   }

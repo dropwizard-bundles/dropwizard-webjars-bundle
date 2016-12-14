@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
  * without having to update all of the references to the WebJar in your UI code.
  */
 public class WebJarServlet extends HttpServlet {
+  private static final long serialVersionUID = 0L;
+
   /** The default URL prefix that webjars are served out of. */
   public static final String DEFAULT_URL_PREFIX = "/webjars/";
 
@@ -39,9 +41,6 @@ public class WebJarServlet extends HttpServlet {
 
   private static final Logger LOG = LoggerFactory.getLogger(WebJarServlet.class);
 
-  /** The URL prefix that webjars are served out of. */
-  private final String urlPrefix;
-
   /** A path parser that can determine the library and library resource a particular path is for. */
   private final Pattern pathParser;
 
@@ -53,21 +52,26 @@ public class WebJarServlet extends HttpServlet {
    * @param builder The cache definition for our webjar bundle.
    * @param groups The allowed maven groups of webjars to look for and match against.
    */
-  @SuppressWarnings("unchecked")
-  public WebJarServlet(CacheBuilder builder, Iterable<String> groups, String urlPrefix) {
-    if (builder == null) {
-      builder = CacheBuilder.newBuilder()
-          .maximumWeight(5 * 1024 * 1024)
-          .expireAfterAccess(5, TimeUnit.MINUTES);
-    }
-
+  public WebJarServlet(CacheBuilder<AssetId, Asset> builder, Iterable<String> groups,
+                       String urlPrefix) {
     if (groups == null || Iterables.isEmpty(groups)) {
       groups = ImmutableList.copyOf(DEFAULT_MAVEN_GROUPS);
     }
 
     AssetLoader loader = new AssetLoader(new VersionLoader(groups));
-    cache = builder.weigher(new AssetWeigher()).build(loader);
-    this.urlPrefix = urlPrefix;
+
+    if (builder == null) {
+      cache = CacheBuilder.newBuilder()
+          .maximumWeight(5 * 1024 * 1024)
+          .expireAfterAccess(5, TimeUnit.MINUTES)
+          .weigher(new AssetWeigher())
+          .build(loader);
+    } else {
+      cache = builder
+          .weigher(new AssetWeigher())
+          .build(loader);
+    }
+
     pathParser = Pattern.compile(urlPrefix + "([^/]+)/(.+)");
   }
 
@@ -130,11 +134,8 @@ public class WebJarServlet extends HttpServlet {
     }
 
     // Finally write the bytes of the asset out
-    ServletOutputStream output = resp.getOutputStream();
-    try {
+    try (ServletOutputStream output = resp.getOutputStream()) {
       output.write(asset.bytes);
-    } finally {
-      output.close();
     }
   }
 
