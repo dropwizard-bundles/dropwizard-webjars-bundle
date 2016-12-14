@@ -1,13 +1,12 @@
 package io.dropwizard.bundles.webjars;
 
 import com.google.common.base.Throwables;
+import java.nio.ByteBuffer;
 import org.eclipse.jetty.http.HttpTester;
 import org.eclipse.jetty.servlet.ServletTester;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.nio.ByteBuffer;
 
 import static com.google.common.net.HttpHeaders.ETAG;
 import static com.google.common.net.HttpHeaders.IF_MODIFIED_SINCE;
