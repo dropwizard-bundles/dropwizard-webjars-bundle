@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>dropwizard-webjars-bundle</artifactId>
-  <version>1.0.5-SNAPSHOT</version>  <!-- Make sure to keep this in sync with the parent pom version above. -->
+  <version>1.0.5</version>  <!-- Make sure to keep this in sync with the parent pom version above. -->
   <packaging>jar</packaging>
 
   <name>dropwizard-webjars-bundle</name>
@@ -27,6 +27,7 @@
     <url>https://github.com/dropwizard-bundles/dropwizard-webjars-bundle</url>
     <connection>scm:git:git@github.com:dropwizard-bundles/dropwizard-webjars-bundle.git</connection>
     <developerConnection>scm:git:git@github.com:dropwizard-bundles/dropwizard-webjars-bundle.git</developerConnection>
+    <tag>v1.0.5</tag>
   </scm>
 
   <developers>
