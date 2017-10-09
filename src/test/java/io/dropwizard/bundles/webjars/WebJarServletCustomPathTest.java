@@ -1,6 +1,5 @@
 package io.dropwizard.bundles.webjars;
 
-import com.google.common.base.Throwables;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import org.eclipse.jetty.http.HttpTester;
@@ -56,7 +55,7 @@ public class WebJarServletCustomPathTest {
       ByteBuffer responses = servletTester.getResponses(raw);
       response = HttpTester.parseResponse(responses);
     } catch (Exception e) {
-      throw Throwables.propagate(e);
+      throw new RuntimeException(e);
     }
 
     return response;
