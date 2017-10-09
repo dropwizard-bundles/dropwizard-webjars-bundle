@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.notNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -20,7 +20,7 @@ public class WebJarBundleTest {
     new WebJarBundle().run(environment);
 
     ServletRegistration.Dynamic dynamic = environment.servlets()
-        .addServlet(eq("webjars"), notNull(WebJarServlet.class));
+        .addServlet(eq("webjars"), isA(WebJarServlet.class));
     ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
     verify(dynamic).addMapping(pathCaptor.capture());
 
@@ -33,7 +33,7 @@ public class WebJarBundleTest {
     new WebJarBundle().withUrlPrefix(path).run(environment);
 
     ServletRegistration.Dynamic dynamic = environment.servlets()
-        .addServlet(eq("webjars"), notNull(WebJarServlet.class));
+        .addServlet(eq("webjars"), isA(WebJarServlet.class));
     ArgumentCaptor<String> pathCaptor = ArgumentCaptor.forClass(String.class);
     verify(dynamic).addMapping(pathCaptor.capture());
 
